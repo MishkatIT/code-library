@@ -1,9 +1,0 @@
-# Ignore compiled binaries and logs
-*.log
-*.exe
-*.dll
-*.o
-# Ignore directory named "build"
-build/
-
-
