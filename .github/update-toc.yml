@@ -1,0 +1,29 @@
+name: Update TOC
+
+on:
+  push:
+    branches:
+      - main  # Adjust the branch name as needed
+
+jobs:
+  update-toc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Generate TOC
+        run: |
+          # Use a tool or script to generate the file structure tree and update the TOC
+          # Replace the following command with the actual command for your use case
+          echo "# Table of Contents\n\n$(tree)" > README.md
+        shell: bash
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add README.md
+          git commit -m "Update TOC"
+          git push
