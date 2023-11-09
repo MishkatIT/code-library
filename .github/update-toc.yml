@@ -3,7 +3,7 @@ name: Update TOC
 on:
   push:
     branches:
-      - main  # Adjust the branch name as needed
+      - main
 
 jobs:
   update-toc:
@@ -16,7 +16,6 @@ jobs:
       - name: Generate TOC
         run: |
           echo "# Table of Contents\n\n" > README.md
-          cd D:\code-library
           dir /s /b >> README.md
         shell: cmd
 
@@ -25,7 +24,7 @@ jobs:
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git add README.md
-          git commit -m "Update TOC"
-          git push origin main --force-with-lease
+          git diff-index --quiet HEAD || git commit -m "Update TOC"
+          git push origin main
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
