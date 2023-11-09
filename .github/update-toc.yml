@@ -21,12 +21,11 @@ jobs:
         shell: cmd
 
       - name: Commit changes
-        run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git add README.md
-          git commit -m "Update TOC"
-          git remote add origin_with_token "https://${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git"
-          git push origin_with_token $GITHUB_REF
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            git config --local user.email "actions@github.com"
+            git config --local user.name "GitHub Actions"
+            git add README.md
+            git commit -m "Update TOC"
+            git push
