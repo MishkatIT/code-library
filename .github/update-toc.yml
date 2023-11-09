@@ -15,8 +15,6 @@ jobs:
 
       - name: Generate TOC
         run: |
-          # Use a tool or script to generate the file structure tree and update the TOC
-          # Replace the following command with the actual command for your use case
           echo "# Table of Contents\n\n" > README.md
           cd D:\code-library
           dir /s /b >> README.md
@@ -28,4 +26,7 @@ jobs:
           git config --local user.name "GitHub Actions"
           git add README.md
           git commit -m "Update TOC"
-          git push origin $GITHUB_REF
+          git remote add origin_with_token "https://$GH_TOKEN@github.com/$GITHUB_REPOSITORY.git"
+          git push origin_with_token $GITHUB_REF
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
