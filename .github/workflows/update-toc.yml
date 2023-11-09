@@ -7,26 +7,24 @@ on:
 
 jobs:
   update-toc:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install tree
-        run: sudo apt-get install tree
-
       - name: Generate TOC
         run: |
-          # Use a tool or script to generate the file structure tree and update the TOC
-          # Replace the following command with the actual command for your use case
-          echo "# Table of Contents\n\n$(tree)" > README.md
-        shell: bash
+          echo "# Table of Contents\n\n" > README.md
+          dir /s /b >> README.md
+        shell: cmd
 
       - name: Commit changes
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git add README.md
-          git commit -m "Update TOC"
-          git push origin $GITHUB_REF
+          git diff-index --quiet HEAD || git commit -m "Update TOC"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOC }}
