@@ -13,6 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install tree
+        run: sudo apt-get install tree
+
       - name: Generate TOC
         run: |
           # Use a tool or script to generate the file structure tree and update the TOC
@@ -26,4 +29,4 @@ jobs:
           git config --local user.name "GitHub Actions"
           git add README.md
           git commit -m "Update TOC"
-          git push
+          git push origin $GITHUB_REF
