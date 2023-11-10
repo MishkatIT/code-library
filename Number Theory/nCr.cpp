@@ -2,7 +2,7 @@
 using namespace std;
 #define ll long long
 
-const ll mod = 1000000007;
+const ll mod = 1e18;
 const int maxN = 1e5 + 10;
 
 void modNormalize(ll &x) { x %= mod; if (x < 0) x += mod; }
@@ -38,6 +38,7 @@ int main() {
     cout << "Enter n and r: ";
     cin >> n >> r;
     ll result = nCr(n, r);
+    cout << "sdss" << fact[70];
     cout << "C(" << n << ", " << r << ") mod " << mod << " = " << result << endl;
     return 0;
 }
