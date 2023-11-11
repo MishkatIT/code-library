@@ -117,4 +117,6 @@ int main() {
     return 0;
 }
 
-//https://lightoj.com/problem/binary-simulation
+/*
+    https://lightoj.com/problem/binary-simulation
+*/
