@@ -101,5 +101,6 @@ int main()
     return 0;
 }
 
-
-//https://lightoj.com/problem/array-queries
+/*
+https://lightoj.com/problem/array-queries
+*/
