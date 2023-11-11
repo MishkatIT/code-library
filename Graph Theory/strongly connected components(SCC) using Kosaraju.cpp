@@ -114,7 +114,12 @@ int main() {
 6 4
 6 7
 
-https://www.programiz.com/dsa/strongly-connected-components
-https://www.programiz.com/dsa/strongly-connected-components
 
+*/
+
+
+/*
+
+    https://www.programiz.com/dsa/strongly-connected-components
+    
 */
