@@ -102,5 +102,5 @@ int main()
 }
 
 /*
-https://lightoj.com/problem/array-queries
+    https://lightoj.com/problem/array-queries
 */
