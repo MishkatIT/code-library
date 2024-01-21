@@ -7,6 +7,31 @@ using namespace std;
 using namespace __gnu_pbds;
 typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_set;
 
+
+
+
+// unordered set
+typedef cc_hash_table<int, null_type> unordered_set_type;
+typedef tree<int, null_type, hash<int>, equal_to<int>, unordered_set_type> unordered_set_tree;
+
+// multiset (ascending order)
+typedef tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_multiset;
+
+// multiset (descending order) 
+typedef tree<int, null_type, greater_equal<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_multiset;
+
+// unordered multiset
+typedef cc_hash_table<int, null_type> unordered_multiset_type;
+typedef tree<int, null_type, hash<int>, equal_to<int>, unordered_multiset_type> unordered_multiset_tree;
+
+
+
+
+
+
+
+
+
 int main() {
     ordered_set pbds_set;
 
@@ -67,17 +92,3 @@ struct custom_compare<string> {
 template<typename T>
 using ordered_set = tree<T, null_type, custom_compare<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
-
-// unordered set
-typedef cc_hash_table<int, null_type> unordered_set_type;
-typedef tree<int, null_type, hash<int>, equal_to<int>, unordered_set_type> unordered_set_tree;
-
-// multiset (ascending order)
-typedef tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_multiset;
-
-// multiset (descending order) 
-typedef tree<int, null_type, greater_equal<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_multiset;
-
-// unordered multiset
-typedef cc_hash_table<int, null_type> unordered_multiset_type;
-typedef tree<int, null_type, hash<int>, equal_to<int>, unordered_multiset_type> unordered_multiset_tree;
