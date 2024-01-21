@@ -1,73 +1,68 @@
-
 #include <bits/stdc++.h>
 using namespace std;
 
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
 using namespace __gnu_pbds;
-typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_set;
 
+// Ordered Set (Ascending Order)
+template <typename T>
+using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
+// Ordered Set (Descending Order)
+template <typename T>
+using ordered_set_desc = tree<T, null_type, greater<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
+// Ordered Multiset (Ascending Order)
+template <typename T>
+using ordered_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
-// unordered set
-typedef cc_hash_table<int, null_type> unordered_set_type;
-typedef tree<int, null_type, hash<int>, equal_to<int>, unordered_set_type> unordered_set_tree;
-
-// multiset (ascending order)
-typedef tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_multiset;
-
-// multiset (descending order) 
-typedef tree<int, null_type, greater_equal<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_multiset;
-
-// unordered multiset
-typedef cc_hash_table<int, null_type> unordered_multiset_type;
-typedef tree<int, null_type, hash<int>, equal_to<int>, unordered_multiset_type> unordered_multiset_tree;
+// Ordered Multiset (Descending Order)
+template <typename T>
+using ordered_multiset_desc = tree<T, null_type, greater_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 
 
 
 
-// several data types 
+// several data types
 
 template<typename T>
 struct custom_compare {
-    bool operator() (const T& a, const T& b) const {
+    bool operator() (auto& a, auto& b) const {
         return a < b;
     }
 };
 
 template<>
 struct custom_compare<pair<int, int>> {
-    bool operator() (const pair<int, int>& a, const pair<int, int>& b) const {
+    bool operator() (auto& a, auto& b) const {
         return a.first < b.first || (a.first == b.first && a.second < b.second);
     }
 };
 
 template<>
 struct custom_compare<vector<int>> {
-    bool operator() (const vector<int>& a, const vector<int>& b) const {
+    bool operator() (auto& a, auto& b) const {
         return lexicographical_compare(a.begin(), a.end(), b.begin(), b.end());
     }
 };
 
 template<>
 struct custom_compare<string> {
-    bool operator() (const string& a, const string& b) const {
+    bool operator() (auto& a, auto& b) const {
         return a < b;
     }
 };
 
 template<typename T>
-using ordered_set = tree<T, null_type, custom_compare<T>, rb_tree_tag, tree_order_statistics_node_update>;
-
-
+using ordered_set_customType = tree<T, null_type, custom_compare<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 
 
 
 int main() {
-    ordered_set pbds_set;
+    ordered_set<int> pbds_set;
 
     pbds_set.insert(3);
     pbds_set.insert(1);
