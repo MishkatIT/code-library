@@ -27,3 +27,57 @@ int main() {
 
     return 0;
 }
+
+
+
+// several data types 
+
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+
+template<typename T>
+struct custom_compare {
+    bool operator() (const T& a, const T& b) const {
+        return a < b;
+    }
+};
+
+template<>
+struct custom_compare<pair<int, int>> {
+    bool operator() (const pair<int, int>& a, const pair<int, int>& b) const {
+        return a.first < b.first || (a.first == b.first && a.second < b.second);
+    }
+};
+
+template<>
+struct custom_compare<vector<int>> {
+    bool operator() (const vector<int>& a, const vector<int>& b) const {
+        return lexicographical_compare(a.begin(), a.end(), b.begin(), b.end());
+    }
+};
+
+template<>
+struct custom_compare<string> {
+    bool operator() (const string& a, const string& b) const {
+        return a < b;
+    }
+};
+
+template<typename T>
+using ordered_set = tree<T, null_type, custom_compare<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
+
+// unordered set
+typedef cc_hash_table<int, null_type> unordered_set_type;
+typedef tree<int, null_type, hash<int>, equal_to<int>, unordered_set_type> unordered_set_tree;
+
+// multiset (ascending order)
+typedef tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_multiset;
+
+// multiset (descending order) 
+typedef tree<int, null_type, greater_equal<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_multiset;
+
+// unordered multiset
+typedef cc_hash_table<int, null_type> unordered_multiset_type;
+typedef tree<int, null_type, hash<int>, equal_to<int>, unordered_multiset_type> unordered_multiset_tree;
