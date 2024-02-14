@@ -1,33 +1,28 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void sieve(int n) {
-    vector<bool> isPrime(n + 1, true);
+const int N = 2e6;
+vector<int>prime;
+void sieve() {
+    vector<bool> isPrime(N, true);
     isPrime[0] = isPrime[1] = false;
-
-    for (int p = 2; p * p <= n; p++) {
-        if (isPrime[p]) {
-            for (int i = p * p; i <= n; i += p) {
-                isPrime[i] = false;
+    
+    for (int i = 2; i * i < N; i++) {
+        if (isPrime[i]) {
+            for (int j = i * i; j < N; j += i) {
+                isPrime[j] = false;
             }
         }
     }
 
-    cout << "Prime numbers up to " << n << " are:\n";
-    for (int p = 2; p <= n; p++) {
-        if (isPrime[p]) {
-            cout << p << " ";
+    for (int i = 2; i < N; i++) {
+        if (isPrime[i]) {
+            prime.push_back(i);
         }
     }
-    cout << endl;
 }
 
 int main() {
-    int n;
-    cout << "Enter a number to find all primes up to that number: ";
-    cin >> n;
-
-    sieve(n);
-
+    sieve();
     return 0;
 }
