@@ -1,46 +1,45 @@
-
 #include <bits/stdc++.h>
 using namespace std;
 
 const int INF = 1e9;
-const int N = 1000;
-vector<vector<pair<int, int>>> graph(N);
-vector<int> dist(N, INF);
-vector<bool> vis(N, false);
+const int N = 2e5 + 5;
+using ll = long long;
 
-void dijkstra(int source)
+vector<int> parent(N);
+
+
+vector<pair<ll, ll>> adj[N];
+vector<ll> dist(N, INF);
+
+void dijkstra(int src)
 {
-    dist[source] = 0;
+    dist[src] = 0;
     set<pair<int, int>> s;
-    s.insert({0, source});
+    s.insert({0, src});
 
     while (!s.empty()) {
         int u = s.begin()->second;
         s.erase(s.begin());
 
-        if (vis[u]) {
-            continue;
-        }
-
-        vis[u] = true;
-
-        for (const auto& edge : graph[u]) {
+        for (const auto& edge : adj[u]) {
             int v = edge.first;
-            int weight = edge.second;
-            if (dist[u] + weight < dist[v]) {
+            int w = edge.second;
+            if (dist[u] + w < dist[v]) {
                 s.erase({dist[v], v});
-                dist[v] = dist[u] + weight;
+                dist[v] = dist[u] + w;
                 s.insert({dist[v], v});
             }
         }
     }
+}
 
-    // Print the shortest distances from the source vertex to all nodes
-    for (int i = 0; i < N; ++i) {
-        if (dist[i] != INF) {
-            cout << "Shortest distance from " << source << " to " << i << ": " << dist[i] << '\n';
-        }
+void printPath(int s, int e) {
+    if (s == e) {
+        cout << s << ' ';
+        return;
     }
+    printPath(s, parent[e]);
+    cout << e << ' ';
 }
 
 int main()
@@ -51,15 +50,14 @@ int main()
     for (int i = 0; i < E; ++i) {
         int u, v, w;
         cin >> u >> v >> w;
-        graph[u].emplace_back(v, w);
-        graph[v].emplace_back(u, w);
-
+        adj[u].emplace_back(v, w);
+        adj[v].emplace_back(u, w);
     }
 
-    int source;
-    cin >> source;
+    int src;
+    cin >> src;
 
-    dijkstra(source);
+    dijkstra(src);
 
     return 0;
 }
