@@ -1,106 +1,110 @@
 #include <bits/stdc++.h>
 using namespace std;
+using ll = long long;
 
-class SegmentTree {
+
+vector<ll> tree, lazy;
+
+class segmentTree
+{
 public:
-    vector<long long> tree, lazy;
     int n;
-
-    SegmentTree(vector<int>& arr) {
-        n = arr.size();
-        tree.assign(4 * n, 0);
-        lazy.assign(4 * n, 0);
-        build(arr, 1, 0, n - 1);
+    segmentTree(vector<ll>& v)
+    {
+        n = v.size();
+        tree.resize(4 * n);
+        lazy.resize(4 * n);
+        build(v, 1, 0, n - 1);
     }
 
-    void build(vector<int>& arr, int node, int s, int e) {
+    void build(vector<ll>& v, int node, int s, int e)
+    {
         if (s == e) {
-            tree[node] = arr[s];
-        } else {
-            int mid = (s + e) / 2;
-            build(arr, 2 * node, s, mid);
-            build(arr, 2 * node + 1, mid + 1, e);
-            tree[node] = min(tree[2 * node] , tree[2 * node + 1]);
-        }
-    }
-
-   void propagate(int node, int s, int e) {
-    if (lazy[node] != 0) {
-        tree[node] = lazy[node];
-        if (s != e) {
-            lazy[2 * node] = lazy[node];
-            lazy[2 * node + 1] = lazy[node];
-        }
-        lazy[node] = 0;
-    }
-}
-
-    void update(int node, int s, int e, int l, int r, int val) {
-        propagate(node, s, e);
-        if (l > e || r < s) {
+            tree[node] = v[s];
             return;
         }
+        int mid = (s + e) / 2;
+        build(v, 2 * node, s, mid);
+        build(v, 2 * node + 1, mid + 1, e);
+        tree[node] = min(tree[2 * node], tree[2 * node + 1]);
+    }
+
+
+    void propagate(int node, int s, int e)
+    {
+        if (lazy[node] != 0) {
+            tree[node] += lazy[node];
+            if (s != e) {
+                lazy[2 * node] += lazy[node];
+                lazy[2 * node + 1] += lazy[node];
+            }
+            lazy[node] = 0;
+        }
+    }
+
+    void range_update(int node, int s, int e, int l, int r, ll val)
+    {
+        if (e < l || r < s) {
+            return;
+        }
+        propagate(node, s, e);
         if (l <= s && e <= r) {
             lazy[node] += val;
             propagate(node, s, e);
             return;
         }
         int mid = (s + e) / 2;
-        update(2 * node, s, mid, l, r, val);
-        update(2 * node + 1, mid + 1, e, l, r, val);
-        tree[node] = tree[2 * node] + tree[2 * node + 1];
+        range_update(2 * node, s, mid, l, r, val);
+        range_update(2 * node + 1, mid + 1, e, l, r, val);
+        tree[node] = min(tree[2 * node], tree[2 * node + 1]);
     }
 
-    long long query(int node, int s, int e, int l, int r) {
-        if (l > e || r < s) {
-            return INT_MAX;
+    ll range_query(int node, int s, int e, int l, int r)
+    {
+        if (e < l || r < s) {
+            return LLONG_MAX;
         }
+        propagate(node, s, e);
         if (l <= s && e <= r) {
             return tree[node];
         }
         int mid = (s + e) / 2;
-        long long leftmin = query(2 * node, s, mid, l, r);
-        long long rightmin = query(2 * node + 1, mid + 1, e, l, r);
-        return min(leftmin, rightmin);
-
+        ll left = range_query(2 * node, s, mid, l, r);
+        ll right = range_query(2 * node + 1, mid + 1, e, l, r);
+        return min(left, right);
     }
 
-    void range_update(int l, int r, int val) {
-        update(1, 0, n - 1, l, r, val);
+    ll query(int l, int r)
+    {
+        return range_query(1, 0, n - 1, l - 1, r - 1);
+    }
+    void update(int l, int r, ll val)
+    {
+        range_update(1, 0, n - 1, l - 1, r - 1, val);
     }
 
-    long long range_query(int l, int r) {
-        return query(1, 0, n - 1, l, r);
-    }
 };
+
 
 
 
 int main()
 {
-
     int t;
     cin >> t;
-    int cs = 0;
     while(t--) {
         int n, q;
         cin >> n >> q;
-        vector<int> arr(n);
+        vector<ll> v(n);
         for (int i = 0; i < n; i++) {
-            cin >> arr[i];
+            cin >> v[i];
         }
-         SegmentTree st(arr);
-        cout << "Case " << ++cs<<":\n";
+        segmentTree st(v);
         while(q--) {
             int l, r;
             cin >> l >> r;
-            l--, r--;
-            cout << st.query(0, 0, n - 1, l, r) << '\n';
+            cout << st.query(l, r) << '\n';
         }
     }
     return 0;
 }
-
-/*
-    https://lightoj.com/problem/array-queries
-*/
