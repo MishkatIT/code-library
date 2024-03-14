@@ -3,6 +3,7 @@ using namespace std;
 using ll = long long;
 
 
+
 vector<ll> tree, lazy;
 
 class segmentTree
