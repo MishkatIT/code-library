@@ -45,10 +45,10 @@ public:
 
     void range_update(int node, int s, int e, int l, int r, ll val)
     {
+        propagate(node, s, e);
         if (e < l || r < s) {
             return;
         }
-        propagate(node, s, e);
         if (l <= s && e <= r) {
             lazy[node] += val;
             propagate(node, s, e);
@@ -62,10 +62,10 @@ public:
 
     ll range_query(int node, int s, int e, int l, int r)
     {
+        propagate(node, s, e);
         if (e < l || r < s) {
             return LLONG_MAX;
         }
-        propagate(node, s, e);
         if (l <= s && e <= r) {
             return tree[node];
         }
