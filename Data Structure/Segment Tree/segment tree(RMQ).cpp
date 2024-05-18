@@ -2,14 +2,12 @@
 using namespace std;
 using ll = long long;
 
-
-
-vector<ll> tree, lazy;
-
 class segmentTree
 {
 public:
     int n;
+    vector<ll> tree, lazy;
+
     segmentTree(vector<ll>& v)
     {
         n = v.size();
@@ -18,6 +16,9 @@ public:
         build(v, 1, 0, n - 1);
     }
 
+    #define lc (node << 1)
+    #define rc ((node << 1) | 1)
+
     void build(vector<ll>& v, int node, int s, int e)
     {
         if (s == e) {
@@ -25,19 +26,23 @@ public:
             return;
         }
         int mid = (s + e) / 2;
-        build(v, 2 * node, s, mid);
-        build(v, 2 * node + 1, mid + 1, e);
-        tree[node] = min(tree[2 * node], tree[2 * node + 1]);
+        build(v, lc, s, mid);
+        build(v, rc, mid + 1, e);
+        tree[node] = merge(tree[lc], tree[rc]);
     }
 
+    ll merge(ll a, ll b)
+    {
+        return min(a, b);
+    }
 
     void propagate(int node, int s, int e)
     {
         if (lazy[node] != 0) {
             tree[node] += lazy[node];
             if (s != e) {
-                lazy[2 * node] += lazy[node];
-                lazy[2 * node + 1] += lazy[node];
+                lazy[lc] += lazy[node];
+                lazy[rc] += lazy[node];
             }
             lazy[node] = 0;
         }
@@ -55,9 +60,9 @@ public:
             return;
         }
         int mid = (s + e) / 2;
-        range_update(2 * node, s, mid, l, r, val);
-        range_update(2 * node + 1, mid + 1, e, l, r, val);
-        tree[node] = min(tree[2 * node], tree[2 * node + 1]);
+        range_update(lc, s, mid, l, r, val);
+        range_update(rc, mid + 1, e, l, r, val);
+        tree[node] = merge(tree[lc], tree[rc]);
     }
 
     ll range_query(int node, int s, int e, int l, int r)
@@ -70,24 +75,21 @@ public:
             return tree[node];
         }
         int mid = (s + e) / 2;
-        ll left = range_query(2 * node, s, mid, l, r);
-        ll right = range_query(2 * node + 1, mid + 1, e, l, r);
-        return min(left, right);
+        ll left = range_query(lc, s, mid, l, r);
+        ll right = range_query(rc, mid + 1, e, l, r);
+        return merge(left, right);
     }
 
     ll query(int l, int r)
     {
         return range_query(1, 0, n - 1, l - 1, r - 1);
     }
+
     void update(int l, int r, ll val)
     {
         range_update(1, 0, n - 1, l - 1, r - 1, val);
     }
-
 };
-
-
-
 
 int main()
 {
