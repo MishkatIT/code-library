@@ -6,13 +6,13 @@ class segmentTree
 {
 public:
     int n;
-    vector<ll> tree, lazy;
+    vector<ll> Tree, Lazy;
 
     segmentTree(vector<ll>& v)
     {
         n = v.size();
-        tree.resize(4 * n);
-        lazy.resize(4 * n);
+        Tree.resize(4 * n);
+        Lazy.resize(4 * n);
         build(v, 1, 0, n - 1);
     }
 
@@ -22,13 +22,13 @@ public:
     void build(vector<ll>& v, int node, int s, int e)
     {
         if (s == e) {
-            tree[node] = v[s];
+            Tree[node] = v[s];
             return;
         }
         int mid = (s + e) / 2;
         build(v, lc, s, mid);
         build(v, rc, mid + 1, e);
-        tree[node] = merge(tree[lc], tree[rc]);
+        Tree[node] = merge(Tree[lc], Tree[rc]);
     }
 
     ll merge(ll a, ll b)
@@ -38,13 +38,13 @@ public:
 
     void propagate(int node, int s, int e)
     {
-        if (lazy[node] != 0) {
-            tree[node] += lazy[node];
+        if (Lazy[node] != 0) {
+            Tree[node] += Lazy[node];
             if (s != e) {
-                lazy[lc] += lazy[node];
-                lazy[rc] += lazy[node];
+                Lazy[lc] += Lazy[node];
+                Lazy[rc] += Lazy[node];
             }
-            lazy[node] = 0;
+            Lazy[node] = 0;
         }
     }
 
@@ -55,14 +55,14 @@ public:
             return;
         }
         if (l <= s && e <= r) {
-            lazy[node] += val;
+            Lazy[node] += val;
             propagate(node, s, e);
             return;
         }
         int mid = (s + e) / 2;
         range_update(lc, s, mid, l, r, val);
         range_update(rc, mid + 1, e, l, r, val);
-        tree[node] = merge(tree[lc], tree[rc]);
+        Tree[node] = merge(Tree[lc], Tree[rc]);
     }
 
     ll range_query(int node, int s, int e, int l, int r)
@@ -72,7 +72,7 @@ public:
             return LLONG_MAX;
         }
         if (l <= s && e <= r) {
-            return tree[node];
+            return Tree[node];
         }
         int mid = (s + e) / 2;
         ll left = range_query(lc, s, mid, l, r);
