@@ -1,66 +1,63 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<int> computeLPS(string pattern) {
-    int patternLength = pattern.length();
-    vector<int> lps(patternLength, 0);
-
-    int len = 0; // Length of the previous longest prefix suffix
-
-    for (int i = 1; i < patternLength; ) {
-        if (pattern[i] == pattern[len]) {
+void computeLPS(int m, string& ptr, vector<int>& lps) {
+    int len = 0, i = 1;
+    while (i < m) {
+        if (ptr[i] == ptr[len]) {
             len++;
             lps[i] = len;
             i++;
         } else {
             if (len != 0) {
-                len = lps[len - 1];
+                len = lps[len-1];
             } else {
-                lps[i] = 0;
                 i++;
             }
         }
     }
-
-    return lps;
 }
 
-void kmpSearch(string text, string pattern) {
-    int textLength = text.length();
-    int patternLength = pattern.length();
-    vector<int> lps = computeLPS(pattern);
-
-    int i = 0; // Index for text[]
-    int j = 0; // Index for pattern[]
-
-    while (i < textLength) {
-        if (pattern[j] == text[i]) {
-            i++;
-            j++;
-        }
-
-        if (j == patternLength) {
-            cout << "Pattern found at index " << i - j << endl;
-            j = lps[j - 1];
-        } else if (i < textLength && pattern[j] != text[i]) {
+vector<int> KMP(string& str, string& ptr) {
+    int n = str.length(), m = ptr.length();
+    vector<int> lps(m); 
+    computeLPS(m, ptr, lps);
+    vector<int> pos;
+    int i = 0, j = 0;
+    while (i < n) {
+        if (ptr[j] == str[i]) {
+            i++, j++;
+        } else {
             if (j != 0) {
                 j = lps[j - 1];
             } else {
                 i++;
             }
         }
+        if (j == m) {
+            pos.push_back(i - j);
+            j = lps[j - 1];
+        }
     }
+    return pos;
 }
+
 
 int main() {
-    string text, pattern;
-    cout << "Enter the text: ";
-    cin >> text;
-    cout << "Enter the pattern to search for: ";
-    cin >> pattern;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
 
-    kmpSearch(text, pattern);
-
+    int tc;
+    cin >> tc;
+    while (tc--) {
+        string str, ptr;
+        cin >> str >> ptr;
+        vector<int> ans = KMP(str, ptr);
+        int sz = ans.size();
+        cout << sz << '\n';
+        for (int i = 0; i < sz; i++) {
+            cout << ans[i] + 1 << " \n"[i == sz - 1];
+        }
+    }
     return 0;
 }
-
