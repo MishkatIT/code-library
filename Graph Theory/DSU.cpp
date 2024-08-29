@@ -23,9 +23,7 @@ public:
             if (child[rootU] < child[rootV]) {
                 swap(rootU, rootV);
             }
-
             parent[rootV] = rootU;
-
             child[rootU] += child[rootV];
         }
     }
@@ -36,7 +34,7 @@ int main() {
     mt19937_64 rnd(chrono::steady_clock::now().time_since_epoch().count());
 
     int n = rnd() % 20 + 1;
-    
+
     DSU dsu(n);
 
     for (int i = 0; i < n / 2; i++) {
