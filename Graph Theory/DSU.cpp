@@ -1,6 +1,4 @@
-#include <iostream>
-#include <vector>
-
+#include<bits/stdc++.h>
 using namespace std;
 
 class DSU {
@@ -9,14 +7,12 @@ public:
 
     DSU(int n) {
         parent.resize(n);
-        child.resize(n, 0);
-        for (int i = 0; i < n; ++i) {
-            parent[i] = i;
-        }
+        child.resize(n, 1);
+        iota(parent.begin(), parent.end(), 0);
     }
 
     int root(int x) {
-        return (parent[x] != x) ? (parent[x] = root(parent[x])) : x;
+        return ((parent[x] == x) ? x : parent[x] = root(parent[x])); 
     }
 
     void join(int u, int v) {
@@ -36,17 +32,20 @@ public:
 };
 
 int main() {
-    int n;
-//    cin >> n;
-//
-    DSU dsu(n = 5);
 
-    // Example usage:
-    dsu.join(0, 1);
-    dsu.join(2, 3);
-    dsu.join(0, 2);
+    mt19937_64 rnd(chrono::steady_clock::now().time_since_epoch().count());
 
-    cout << "Are 1 and 2 in the same set? " << (dsu.root(1) == dsu.root(2) ? "Yes" : "No") << '\n';
+    int n = rnd() % 20 + 1;
+    
+    DSU dsu(n);
 
+    for (int i = 0; i < n / 2; i++) {
+        dsu.join(rnd() % n, rnd() % n);
+    }
+    int query = rnd() % n;
+    for (int i = 0; i < query; i++) {
+        int x = rnd() % n;
+        cout << "Root of " << x << " is " << dsu.root(x) << '\n'; 
+    }
     return 0;
 }
