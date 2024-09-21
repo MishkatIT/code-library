@@ -1,56 +1,50 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-string preprocessString(string s) {
-    int n = s.size();
-    if (n == 0) return "^$";
-    string result = "^";
+string manacher(string& str) {
+    string t = "#";
+    for (auto& i : str) {
+        t += i;
+        t += "#";
+    }
+    int n = t.size();
+    vector<int> p(n);
+    int center = 0, right = 0;
     for (int i = 0; i < n; i++) {
-        result += "#" + s[i];
-    }
-    result += "#$";
-    return result;
-}
-
-string longestPalindromicSubstring(string s) {
-    string T = preprocessString(s);
-    int n = T.size();
-    vector<int> P(n, 0);
-    int C = 0, R = 0; // Center and right boundary of the current palindrome
-    int maxLen = 0;
-    int centerIndex = 0;
-
-    for (int i = 1; i < n - 1; i++) {
-        int mirr = 2 * C - i;
-        if (i < R) {
-            P[i] = min(R - i, P[mirr]);
+        int mirror = 2 * center - i;
+        if (i < right) {
+            p[i] = min(p[mirror], right - i);
         }
-        // Attempt to expand palindrome centered at i
-        while (T[i + 1 + P[i]] == T[i - 1 - P[i]]) {
-            P[i]++;
+        while (i + p[i] + 1 < n && i - p[i] - 1 >= 0 && t[i + p[i] + 1] == t[i - p[i] - 1]) {
+            p[i]++;
         }
-        // If palindrome centered at i expands past R,
-        // adjust center and right boundary
-        if (i + P[i] > R) {
-            C = i;
-            R = i + P[i];
-        }
-        // Find the maximum element in P
-        if (P[i] > maxLen) {
-            maxLen = P[i];
-            centerIndex = i;
+        if (i + p[i] > right) {  
+            right = i + p[i];
+            center = i;
         }
     }
-
-    int start = (centerIndex - maxLen) / 2;
-    return s.substr(start, maxLen);
+    int mx = 0, c = -1;
+    for (int i = 0; i < n; i++) {
+        if (p[i] > mx) {
+            mx = p[i];
+            c = i;
+        }
+    }
+    int start = (c - mx) / 2;
+    return str.substr(start, mx);
 }
 
 int main() {
-    string s;
-    cout << "Enter a string: ";
-    cin >> s;
-    string longestPalindrome = longestPalindromicSubstring(s);
-    cout << "Longest Palindromic Substring: " << longestPalindrome << endl;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int tc;
+    cin >> tc;
+    while (tc--) {
+        string str;
+        cin >> str;
+        cout << manacher(str) << '\n';
+    }
     return 0;
 }
+
