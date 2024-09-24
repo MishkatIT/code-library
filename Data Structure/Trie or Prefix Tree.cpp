@@ -1,67 +1,60 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-
-struct Node {
-    Node* links[26];
-    bool flag = false;
-    bool containsKey(char ch) {
-        return links[ch - 'a'] != nullptr;
-    }
-    void put(char ch, Node* node) {
-        links[ch - 'a'] = node;
-    }
-    Node* get(char ch) {
-        return links[ch - 'a'];
-    }
-    void setEnd() {
-        flag = true;
-    }
-    bool isEnd() {
-        return flag;
+class trieNode{
+public:
+    bool isEnd;
+    trieNode* child[26];
+    trieNode() {
+        isEnd = false;
+        fill(begin(child), end(child), nullptr);
     }
 };
 
-class Trie {
+class trie{
 public:
-    Node* root;
-    Trie() {
-        root = new Node();
+    trieNode* root;
+    trie() {
+        root = new trieNode;
     }
 
-    void insert(string word) {
-        Node* node = root;
-        for (char i : word) {
-            if (!node->containsKey(i)) {
-                node->put(i, new Node());
-            }
-            node = node->get(i); // move to the reference trie
+    int getIdx(char c) {
+        return c - 'a';
+    }
+
+    void insert(const string& word) {
+        trieNode* node = root;
+        for (auto& c: word) {
+            int idx = getIdx(c);
+            if (!node->child[idx]) {
+                node->child[idx] = new trieNode();
+            } 
+            node = node->child[idx];
         }
-        node->setEnd();
-    }
-
-    bool search(string word) {
-        Node* node = root;
-        for (char i : word) {
-            if (!node->containsKey(i)) {
-                return false;
-            }
-            node = node->get(i);
+        node->isEnd = true;
+    } 
+    
+    bool search(const string& word) {
+        trieNode* node = root;
+        for (auto& c : word) {
+            int idx = getIdx(c);
+            if (!node->child[idx]) return false;
+            node = node->child[idx];
         }
-        return node->isEnd();
+        return node->isEnd;
     }
 
-    bool startsWith(string prefix) {
-        Node* node = root;
-        for (char i : prefix) {
-            if (!node->containsKey(i)) {
-                return false;
-            }
-            node = node->get(i);
+    bool isPrefix(const string& pref) {
+        trieNode* node = root;
+        for (auto& c: pref) {
+            int idx = getIdx(c);
+            if (!node->child[idx]) return false;
+            node = node->child[idx];
         }
         return true;
     }
 };
+
 
 int main() {
     ios_base::sync_with_stdio(false);
@@ -70,22 +63,10 @@ int main() {
     int tc;
     cin >> tc;
     while (tc--) {
-        Trie tr;
-        int x;
-        cin >> x;
-        for (int i = 0; i < x; i++) {
-            string original;
-            cin >> original;
-            tr.insert(original);
-        }
-        int n;
-        cin >> n;
-        for (int i = 0; i < n; i++) {
-            string str;
-            cin >> str;
-            cout << "contains " << str  << ' ' << tr.search(str) << '\n';
-            cout << "isPrefix " << str << ' ' <<tr.startsWith(str) << '\n';
-        }
+        trie tr;
+        string word = "hello";
+        tr.insert(word);
+        cout << tr.search("rand");
     }
     return 0;
 }
