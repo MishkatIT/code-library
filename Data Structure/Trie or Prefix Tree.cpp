@@ -1,21 +1,21 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class trieNode{
+class TrieNode{
 public:
     bool isEnd;
-    trieNode* child[26];
-    trieNode() {
+    TrieNode* child[26];
+    TrieNode() {
         isEnd = false;
         fill(begin(child), end(child), nullptr);
     }
 };
 
-class trie{
+class Trie{
 public:
-    trieNode* root;
-    trie() {
-        root = new trieNode;
+    TrieNode* root;
+    Trie() {
+        root = new TrieNode;
     }
 
     int getIdx(char c) {
@@ -23,11 +23,11 @@ public:
     }
 
     void insert(const string& word) {
-        trieNode* node = root;
+        TrieNode* node = root;
         for (auto& c: word) {
             int idx = getIdx(c);
             if (!node->child[idx]) {
-                node->child[idx] = new trieNode();
+                node->child[idx] = new TrieNode();
             } 
             node = node->child[idx];
         }
@@ -35,7 +35,7 @@ public:
     } 
     
     bool search(const string& word) {
-        trieNode* node = root;
+        TrieNode* node = root;
         for (auto& c : word) {
             int idx = getIdx(c);
             if (!node->child[idx]) return false;
@@ -45,7 +45,7 @@ public:
     }
 
     bool isPrefix(const string& pref) {
-        trieNode* node = root;
+        TrieNode* node = root;
         for (auto& c: pref) {
             int idx = getIdx(c);
             if (!node->child[idx]) return false;
@@ -63,7 +63,7 @@ int main() {
     int tc;
     cin >> tc;
     while (tc--) {
-        trie tr;
+        Trie tr;
         string word = "hello";
         tr.insert(word);
         cout << tr.search("rand");
